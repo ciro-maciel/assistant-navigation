@@ -1,4 +1,4 @@
-// The tools an AI agent gets for a Tabhand browser: one request each to the extension through
+// The tools an AI agent gets for a Assistant Navigation browser: one request each to the extension through
 // the tunnel (client.js). The MCP server (mcp/server.js) serves this list as is; an app that
 // runs its own agents can import it too.
 //

@@ -1,8 +1,8 @@
-// Tabhand's tunnel server: a Cloudflare Worker with one Durable Object per browser.
+// Assistant Navigation's tunnel server: a Cloudflare Worker with one Durable Object per browser.
 //
 // Ported from Playwriter's remote-control tunnel (website/src/remote-control-tunnel.ts,
 // https://github.com/remorses/playwriter, MIT License, Copyright (c) 2026 Tommy D. Rossi; see
-// NOTICE). The Tabhand extension dials /tunnel/{id}/upstream and stays there; a client dials
+// NOTICE). The Assistant Navigation extension dials /tunnel/{id}/upstream and stays there; a client dials
 // /tunnel/{id}/extension (the connection code), and each of its connections travels to the
 // extension as a virtual connection (ws_open, ws_frame, ws_close). The id is a 128-bit secret the
 // extension made: whoever holds the connection code can drive that browser.
@@ -21,7 +21,7 @@ const DOWNSTREAM_OPEN_TIMEOUT_MS = 10_000
 function routeTunnel(request, env) {
     const match = new URL(request.url).pathname.match(/^\/tunnel\/([a-z0-9-]{16,63})\/(upstream|extension)$/)
     if (!match) return null
-    if (request.headers.get('Upgrade') !== 'websocket') return new Response('Tabhand tunnel', { status: 200 })
+    if (request.headers.get('Upgrade') !== 'websocket') return new Response('Assistant Navigation tunnel', { status: 200 })
     const rewritten = new URL(request.url)
     rewritten.pathname = match[2] === 'upstream' ? '/upstream' : '/extension'
     return env.BROWSER_TUNNEL.get(env.BROWSER_TUNNEL.idFromName(match[1])).fetch(new Request(rewritten, request))
@@ -189,7 +189,7 @@ export default {
     fetch(request, env) {
         const tunnel = routeTunnel(request, env)
         if (tunnel) return tunnel
-        if (new URL(request.url).pathname === '/') return new Response('Tabhand tunnel server. https://github.com/ciro-maciel/tabhand\n', { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
+        if (new URL(request.url).pathname === '/') return new Response('Assistant Navigation tunnel server. https://github.com/ciro-maciel/assistant-navigation\n', { headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
         return new Response('Not Found', { status: 404 })
     },
 }

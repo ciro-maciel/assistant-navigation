@@ -1,6 +1,6 @@
 {
   "name": {
-    "message": "Tabhand"
+    "message": "Assistant Navigation"
   },
   "description": {
     "message": "Let AI agents use your real, logged-in Chrome. No debugger banner, no tab to keep open."
@@ -60,7 +60,7 @@
     "message": "Saved"
   },
   "welcome_title": {
-    "message": "Tabhand is on"
+    "message": "Assistant Navigation is on"
   },
   "welcome_text": {
     "message": "Agents act in your Chrome through the connection code below. Their tabs open in this window, in their own tab group."

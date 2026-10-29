@@ -1,14 +1,14 @@
 {
-    "name": "tabhand",
-    "version": "1.0.1",
+    "name": "assistant-navigation",
+    "version": "1.1.0",
     "description": "Let AI agents use your real, logged-in Chrome. No debugger banner, no tab to keep open.",
     "license": "MIT",
-    "author": "Ciro Cesar Maciel (https://ciromaciel.click/?ref=oss-tabhand)",
-    "homepage": "https://github.com/ciro-maciel/tabhand",
-    "repository": "github:ciro-maciel/tabhand",
+    "author": "Ciro Cesar Maciel (https://ciromaciel.click/?ref=oss-assistant-navigation)",
+    "homepage": "https://github.com/ciro-maciel/assistant-navigation",
+    "repository": "github:ciro-maciel/assistant-navigation",
     "type": "module",
     "bin": {
-        "tabhand": "mcp/server.js"
+        "assistant-navigation": "mcp/server.js"
     },
     "exports": {
         "./tools": "./src/tools.js",

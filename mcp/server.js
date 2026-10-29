@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// Tabhand as an MCP server over stdio: the tools in src/tools.js, each one request to your
+// Assistant Navigation as an MCP server over stdio: the tools in src/tools.js, each one request to your
 // browser through its connection code. No dependencies: it speaks the protocol's few messages
 // itself (initialize, tools/list, tools/call, ping), so it runs with Node 22+ or Bun.
 //
-// The connection code comes from TABHAND_CODE, or from ~/.config/tabhand/config.json
+// The connection code comes from ASSISTANT_NAVIGATION_CODE, or from ~/.config/assistant-navigation/config.json
 // ({ "code": "wss://…/tunnel/…/extension" }).
 
 import { readFileSync } from 'node:fs'
@@ -15,16 +15,16 @@ import { call, codeOf } from '../src/client.js'
 import { mcpTools, toolOf } from '../src/tools.js'
 
 const VERSION = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version
-const CONFIG = path.join(homedir(), '.config/tabhand/config.json')
+const CONFIG = path.join(homedir(), '.config/assistant-navigation/config.json')
 
 function connectionCode() {
-    let code = codeOf(process.env.TABHAND_CODE)
+    let code = codeOf(process.env.ASSISTANT_NAVIGATION_CODE)
     if (!code) {
         try {
             code = codeOf(JSON.parse(readFileSync(CONFIG, 'utf8')).code)
         } catch {}
     }
-    if (!code) throw new Error(`no connection code: set TABHAND_CODE, or save { "code": "…" } in ${CONFIG}. Copy the code from the Tabhand extension's popup.`)
+    if (!code) throw new Error(`no connection code: set ASSISTANT_NAVIGATION_CODE, or save { "code": "…" } in ${CONFIG}. Copy the code from the Assistant Navigation extension's popup.`)
     return code
 }
 
@@ -43,7 +43,7 @@ async function callTool(name, args) {
 async function answer(message) {
     switch (message.method) {
         case 'initialize':
-            return { protocolVersion: message.params?.protocolVersion || '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'tabhand', version: VERSION } }
+            return { protocolVersion: message.params?.protocolVersion || '2025-06-18', capabilities: { tools: {} }, serverInfo: { name: 'assistant-navigation', version: VERSION } }
         case 'tools/list':
             return { tools: mcpTools() }
         case 'tools/call':

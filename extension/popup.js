@@ -1,4 +1,4 @@
-// Tabhand's popup (also opened as a page on install): the state, the on/off switch, the
+// Assistant Navigation's popup (also opened as a page on install): the state, the on/off switch, the
 // connection code and the advanced settings. It talks to background.js only.
 
 const t = key => chrome.i18n.getMessage(key) || key

@@ -1,12 +1,12 @@
-# Tabhand
+# Assistant Navigation
 
 **Deixe agentes de IA usarem o seu Chrome de verdade, já logado. Sem faixa de depuração e sem aba presa.**
 
-Uma ferramenta gratuita e de código aberto de [Ciro Cesar Maciel](https://ciromaciel.click/?ref=oss-tabhand).
+Parte do [Assistant](https://myagents.click/?ref=oss-assistant-navigation), o assistente de IA de [Ciro Cesar Maciel](https://ciromaciel.click/?ref=oss-assistant-navigation) que trabalha nas suas ferramentas: é por ele que os agentes do Assistant usam o seu navegador. Também é gratuito e de código aberto, para qualquer agente: Claude Code, Cursor ou o seu próprio app.
 
-<img src="docs/icon-512.png" alt="Tabhand" width="96" />
+<img src="docs/icon-512.png" alt="Assistant Navigation" width="96" />
 
-O seu agente precisa de um painel, de uma caixa de entrada ou de uma conta que só abre logada como você. O Tabhand dá a ele o seu próprio Chrome: ele lê páginas, clica, digita e tira fotos num grupo de abas só dele, na janela que você está usando. Funciona de qualquer lugar: do Claude Code no seu computador ou de um agente rodando na nuvem.
+O seu agente precisa de um painel, de uma caixa de entrada ou de uma conta que só abre logada como você. O Assistant Navigation dá a ele o seu próprio Chrome: ele lê páginas, clica, digita e tira fotos num grupo de abas só dele (chamado Assistant), na janela que você está usando. Funciona de qualquer lugar: do Claude Code no seu computador ou de um agente rodando na nuvem.
 
 [English](README.md)
 
@@ -14,7 +14,7 @@ O seu agente precisa de um painel, de uma caixa de entrada ou de uma conta que s
 
 A maioria das ferramentas controla o Chrome pelo depurador (o Chrome DevTools Protocol). É poderoso, mas o Chrome mostra **"… começou a depurar este navegador"** no topo de toda janela enquanto está ligado, e muitas ferramentas exigem uma aba ou uma janela aberta, ou um código novo para colar a cada vez.
 
-O Tabhand usa só as APIs comuns de extensão (`tabs`, `scripting`, `captureVisibleTab`, `userScripts`), então:
+O Assistant Navigation usa só as APIs comuns de extensão (`tabs`, `scripting`, `captureVisibleTab`, `userScripts`), então:
 
 - **nenhuma faixa**, nunca;
 - **nenhuma aba presa**: o service worker da extensão segura a conexão e se religa sozinho com o Chrome;
@@ -23,9 +23,9 @@ O Tabhand usa só as APIs comuns de extensão (`tabs`, `scripting`, `captureVisi
 
 ## Instale a extensão
 
-1. Baixe `tabhand-extension.zip` do [último release](https://github.com/ciro-maciel/tabhand/releases/latest) e descompacte numa pasta que vai ficar no computador.
+1. Baixe `assistant-navigation-extension.zip` do [último release](https://github.com/ciro-maciel/assistant-navigation/releases/latest) e descompacte numa pasta que vai ficar no computador.
 2. Abra `chrome://extensions`, ligue o **Modo do desenvolvedor**, clique em **Carregar sem compactação** e escolha a pasta.
-3. O Tabhand abre a página dele com o seu **código de conexão**. Copie.
+3. O Assistant Navigation abre a página dele com o seu **código de conexão**. Copie.
 4. Opcional: nos **Detalhes** da extensão, ligue **Permitir scripts de usuário** para os agentes rodarem código nas páginas (`browser_script`).
 
 A publicação na Chrome Web Store está a caminho.
@@ -35,7 +35,7 @@ A publicação na Chrome Web Store está a caminho.
 ### Claude Code
 
 ```bash
-claude mcp add tabhand --scope user --env TABHAND_CODE="<seu código de conexão>" -- npx -y github:ciro-maciel/tabhand
+claude mcp add assistant-navigation --scope user --env ASSISTANT_NAVIGATION_CODE="<seu código de conexão>" -- npx -y github:ciro-maciel/assistant-navigation
 ```
 
 ### Cursor, Claude Desktop e outros clientes MCP
@@ -43,28 +43,28 @@ claude mcp add tabhand --scope user --env TABHAND_CODE="<seu código de conexão
 ```json
 {
     "mcpServers": {
-        "tabhand": {
+        "assistant-navigation": {
             "command": "npx",
-            "args": ["-y", "github:ciro-maciel/tabhand"],
-            "env": { "TABHAND_CODE": "<seu código de conexão>" }
+            "args": ["-y", "github:ciro-maciel/assistant-navigation"],
+            "env": { "ASSISTANT_NAVIGATION_CODE": "<seu código de conexão>" }
         }
     }
 }
 ```
 
-No lugar da variável de ambiente, você pode salvar `{ "code": "<seu código de conexão>" }` em `~/.config/tabhand/config.json`. O servidor precisa do Node 22+ (ou do Bun) e não tem dependências.
+No lugar da variável de ambiente, você pode salvar `{ "code": "<seu código de conexão>" }` em `~/.config/assistant-navigation/config.json`. O servidor precisa do Node 22+ (ou do Bun) e não tem dependências.
 
 ### O seu próprio app
 
 ```js
-import { call } from 'tabhand/client'
-import { functionTools, toolOf } from 'tabhand/tools'
+import { call } from 'assistant-navigation/client'
+import { functionTools, toolOf } from 'assistant-navigation/tools'
 
 const tools = functionTools() // definições de ferramenta no formato da OpenAI, para o seu modelo
 const result = await call(code, toolOf('browser_read').method, { tabId: 123 })
 ```
 
-`npm install github:ciro-maciel/tabhand`. Cada ferramenta tem um `risk`: `read` só olha ou se move, `act` muda alguma coisa; se o seu app pergunta a uma pessoa antes de agir, avalie as `act`.
+`npm install github:ciro-maciel/assistant-navigation`. Cada ferramenta tem um `risk`: `read` só olha ou se move, `act` muda alguma coisa; se o seu app pergunta a uma pessoa antes de agir, avalie as `act`.
 
 ## As ferramentas
 
@@ -84,18 +84,18 @@ const result = await call(code, toolOf('browser_read').method, { tabId: 123 })
 ## Como funciona
 
 ```
-seu agente ──(MCP ou tabhand/client)──▶ servidor do túnel ◀──(WebSocket, mantido pelo service worker)── Tabhand no seu Chrome
+seu agente ──(MCP ou assistant-navigation/client)──▶ servidor do túnel ◀──(WebSocket, mantido pelo service worker)── Assistant Navigation no seu Chrome
              wss://…/tunnel/<id>/extension                    wss://…/tunnel/<id>/upstream
 ```
 
-A extensão cria uma vez um id aleatório de 128 bits e mantém um WebSocket aberto com o servidor do túnel. O seu código de conexão é o endereço desse id no servidor; cada pedido do seu agente passa pelo túnel até a extensão, que responde com as APIs de extensão. O servidor público, `wss://tabhand.ciromaciel.click`, é gratuito; ele repassa mensagens e não guarda nada.
+A extensão cria uma vez um id aleatório de 128 bits e mantém um WebSocket aberto com o servidor do túnel. O seu código de conexão é o endereço desse id no servidor; cada pedido do seu agente passa pelo túnel até a extensão, que responde com as APIs de extensão. O servidor público, `wss://navigation.myagents.click`, é gratuito; ele repassa mensagens e não guarda nada.
 
 ### Rode o seu próprio servidor do túnel
 
 É um Cloudflare Worker com um Durable Object, no plano gratuito:
 
 ```bash
-git clone https://github.com/ciro-maciel/tabhand && cd tabhand
+git clone https://github.com/ciro-maciel/assistant-navigation && cd assistant-navigation
 bunx wrangler deploy --config tunnel/wrangler.toml
 ```
 
@@ -111,11 +111,15 @@ Os agentes são instruídos a nunca digitar senhas nem números de cartão, mas 
 
 - O Chrome só fotografa a aba visível: uma foto mostra a aba do agente por um instante.
 - Cliques e digitação são eventos simulados; algumas páginas muito protegidas os ignoram.
-- Sem console nem inspeção de rede: isso exige o depurador, que é justamente o que o Tabhand evita.
+- Sem console nem inspeção de rede: isso exige o depurador, que é justamente o que o Assistant Navigation evita.
+
+## Assistant
+
+O Assistant Navigation é a parte de navegador do [Assistant](https://myagents.click/?ref=oss-assistant-navigation): agentes que trabalham nas suas ferramentas, com conexões, arquivos e aprovações num lugar só. No Assistant, cole o código de conexão uma vez em Configurações › Meu Chrome e todos os agentes da sua conta passam a usar o seu navegador.
 
 ## Mais de Ciro Cesar Maciel
 
-Apps de Mac e ferramentas gratuitos e de código aberto em [ciromaciel.click](https://ciromaciel.click/?ref=oss-tabhand).
+Apps de Mac e ferramentas gratuitos e de código aberto em [ciromaciel.click](https://ciromaciel.click/?ref=oss-assistant-navigation).
 
 ## Licença
 

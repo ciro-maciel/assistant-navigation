@@ -1,6 +1,6 @@
 # Notes for coding agents
 
-Tabhand lets AI agents act in a person's own Chrome without the debugger. Four parts, no build step, no dependencies.
+Assistant Navigation lets AI agents act in a person's own Chrome without the debugger. Four parts, no build step, no dependencies.
 
 ## Layout
 

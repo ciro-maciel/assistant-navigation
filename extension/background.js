@@ -1,4 +1,4 @@
-// Tabhand: AI agents act in your own Chrome, logged in as you, through a tunnel.
+// Assistant Navigation: AI agents act in your own Chrome, logged in as you, through a tunnel.
 //
 // No debugger: everything is done with plain extension APIs (tabs, scripting,
 // captureVisibleTab), so Chrome shows no "is debugging this browser" bar and no tab has to
@@ -9,7 +9,7 @@
 
 import { actOn, readPage, scrollPage } from './page.js'
 
-const DEFAULT_SERVER = 'wss://tabhand.ciromaciel.click'
+const DEFAULT_SERVER = 'wss://navigation.myagents.click'
 const TEXT_MAX = 30_000
 
 let socket = null
@@ -37,7 +37,7 @@ function ensureId() {
 async function settings() {
     const id = await ensureId()
     const stored = await chrome.storage.local.get(['server', 'isOff', 'groupTitle'])
-    return { id, server: stored.server || DEFAULT_SERVER, isOff: Boolean(stored.isOff), groupTitle: stored.groupTitle || 'Tabhand' }
+    return { id, server: stored.server || DEFAULT_SERVER, isOff: Boolean(stored.isOff), groupTitle: stored.groupTitle || 'Assistant' }
 }
 
 /** The connection code: whoever holds it can drive this browser. */
@@ -227,7 +227,7 @@ async function handle(method, params) {
         case 'script': {
             // Arbitrary code goes through the user scripts API, which Chrome opens only when you
             // turn on "Allow user scripts" for this extension.
-            if (!chrome.userScripts?.execute) throw new Error('turn on "Allow user scripts" in the Tabhand extension details (chrome://extensions)')
+            if (!chrome.userScripts?.execute) throw new Error('turn on "Allow user scripts" in the Assistant Navigation extension details (chrome://extensions)')
             const [injection] = await chrome.userScripts.execute({ target: { tabId: params.tabId }, js: [{ code: String(params.code || '') }], world: 'MAIN', injectImmediately: true })
             if (injection?.error) throw new Error(injection.error)
             return { result: injection?.result ?? null }
@@ -248,7 +248,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             const changes = {}
             if (typeof message.isOff === 'boolean') changes.isOff = message.isOff
             if (typeof message.server === 'string') changes.server = message.server.trim() || DEFAULT_SERVER
-            if (typeof message.groupTitle === 'string') changes.groupTitle = message.groupTitle.trim() || 'Tabhand'
+            if (typeof message.groupTitle === 'string') changes.groupTitle = message.groupTitle.trim() || 'Assistant'
             if (message.isNewCode) await chrome.storage.local.remove('id')
             await chrome.storage.local.set(changes)
             // A new server or code takes a new connection.
@@ -267,6 +267,6 @@ chrome.runtime.onInstalled.addListener(details => {
     if (details.reason === 'install') chrome.tabs.create({ url: chrome.runtime.getURL('popup.html?welcome=1') })
 })
 chrome.runtime.onStartup.addListener(connect)
-chrome.alarms.create('tabhand-keep-on', { periodInMinutes: 1 })
-chrome.alarms.onAlarm.addListener(alarm => alarm.name === 'tabhand-keep-on' && connect())
+chrome.alarms.create('assistant-navigation-keep-on', { periodInMinutes: 1 })
+chrome.alarms.onAlarm.addListener(alarm => alarm.name === 'assistant-navigation-keep-on' && connect())
 connect()

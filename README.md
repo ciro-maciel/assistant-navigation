@@ -1,12 +1,12 @@
-# Tabhand
+# Assistant Navigation
 
 **Let AI agents use your real, logged-in Chrome. No debugger banner, no tab to keep open.**
 
-A free, open-source tool by [Ciro Cesar Maciel](https://ciromaciel.click/?ref=oss-tabhand).
+Part of [Assistant](https://myagents.click/?ref=oss-assistant-navigation), the AI assistant by [Ciro Cesar Maciel](https://ciromaciel.click/?ref=oss-assistant-navigation) that works in your tools: it is how Assistant's agents use your browser. It is also free and open source, for any agent: Claude Code, Cursor or your own app.
 
-<img src="docs/icon-512.png" alt="Tabhand" width="96" />
+<img src="docs/icon-512.png" alt="Assistant Navigation" width="96" />
 
-Your agent needs a dashboard, an inbox or an account that only opens logged in as you. Tabhand gives it your own Chrome: it reads pages, clicks, types and takes pictures in a tab group of its own, in the window you are using. It works from anywhere: Claude Code on your laptop, or an agent running in the cloud.
+Your agent needs a dashboard, an inbox or an account that only opens logged in as you. Assistant Navigation gives it your own Chrome: it reads pages, clicks, types and takes pictures in a tab group of its own (named Assistant), in the window you are using. It works from anywhere: Claude Code on your laptop, or an agent running in the cloud.
 
 [Português](README.pt-BR.md)
 
@@ -14,7 +14,7 @@ Your agent needs a dashboard, an inbox or an account that only opens logged in a
 
 Most tools drive Chrome through its debugger (the Chrome DevTools Protocol). That is powerful, but Chrome shows **"… started debugging this browser"** on top of every window while it is on, and many tools need a tab or a window held open, or a new id to paste every time.
 
-Tabhand uses only plain extension APIs (`tabs`, `scripting`, `captureVisibleTab`, `userScripts`), so:
+Assistant Navigation uses only plain extension APIs (`tabs`, `scripting`, `captureVisibleTab`, `userScripts`), so:
 
 - **no banner**, ever;
 - **no tab to keep open**: the extension's service worker holds the connection, and turns itself back on with Chrome;
@@ -23,9 +23,9 @@ Tabhand uses only plain extension APIs (`tabs`, `scripting`, `captureVisibleTab`
 
 ## Install the extension
 
-1. Download `tabhand-extension.zip` from the [latest release](https://github.com/ciro-maciel/tabhand/releases/latest) and unzip it into a folder you will keep.
+1. Download `assistant-navigation-extension.zip` from the [latest release](https://github.com/ciro-maciel/assistant-navigation/releases/latest) and unzip it into a folder you will keep.
 2. Open `chrome://extensions`, turn on **Developer mode**, click **Load unpacked** and pick that folder.
-3. Tabhand opens its page with your **connection code**. Copy it.
+3. Assistant Navigation opens its page with your **connection code**. Copy it.
 4. Optional: in the extension's **Details**, turn on **Allow user scripts** so agents can run code in pages (`browser_script`).
 
 The Chrome Web Store listing is on the way.
@@ -35,7 +35,7 @@ The Chrome Web Store listing is on the way.
 ### Claude Code
 
 ```bash
-claude mcp add tabhand --scope user --env TABHAND_CODE="<your connection code>" -- npx -y github:ciro-maciel/tabhand
+claude mcp add assistant-navigation --scope user --env ASSISTANT_NAVIGATION_CODE="<your connection code>" -- npx -y github:ciro-maciel/assistant-navigation
 ```
 
 ### Cursor, Claude Desktop and other MCP clients
@@ -43,28 +43,28 @@ claude mcp add tabhand --scope user --env TABHAND_CODE="<your connection code>" 
 ```json
 {
     "mcpServers": {
-        "tabhand": {
+        "assistant-navigation": {
             "command": "npx",
-            "args": ["-y", "github:ciro-maciel/tabhand"],
-            "env": { "TABHAND_CODE": "<your connection code>" }
+            "args": ["-y", "github:ciro-maciel/assistant-navigation"],
+            "env": { "ASSISTANT_NAVIGATION_CODE": "<your connection code>" }
         }
     }
 }
 ```
 
-Instead of the environment variable, you can save `{ "code": "<your connection code>" }` in `~/.config/tabhand/config.json`. The server needs Node 22+ (or Bun) and has no dependencies.
+Instead of the environment variable, you can save `{ "code": "<your connection code>" }` in `~/.config/assistant-navigation/config.json`. The server needs Node 22+ (or Bun) and has no dependencies.
 
 ### Your own app
 
 ```js
-import { call } from 'tabhand/client'
-import { functionTools, toolOf } from 'tabhand/tools'
+import { call } from 'assistant-navigation/client'
+import { functionTools, toolOf } from 'assistant-navigation/tools'
 
 const tools = functionTools() // OpenAI-style tool definitions for your model
 const result = await call(code, toolOf('browser_read').method, { tabId: 123 })
 ```
 
-`npm install github:ciro-maciel/tabhand`. Each tool has a `risk`: `read` only looks or moves around, `act` changes something; if your app asks a person before acting, weigh the `act` ones.
+`npm install github:ciro-maciel/assistant-navigation`. Each tool has a `risk`: `read` only looks or moves around, `act` changes something; if your app asks a person before acting, weigh the `act` ones.
 
 ## The tools
 
@@ -84,18 +84,18 @@ const result = await call(code, toolOf('browser_read').method, { tabId: 123 })
 ## How it works
 
 ```
-your agent ──(MCP or tabhand/client)──▶ tunnel server ◀──(WebSocket, held by the service worker)── Tabhand in your Chrome
+your agent ──(MCP or assistant-navigation/client)──▶ tunnel server ◀──(WebSocket, held by the service worker)── Assistant Navigation in your Chrome
             wss://…/tunnel/<id>/extension                 wss://…/tunnel/<id>/upstream
 ```
 
-The extension makes a random 128-bit id once and keeps one WebSocket open to the tunnel server. Your connection code is that id's address on the server; each request your agent sends travels through the tunnel to the extension, which answers it with extension APIs. The public server, `wss://tabhand.ciromaciel.click`, is free; it relays messages and stores nothing.
+The extension makes a random 128-bit id once and keeps one WebSocket open to the tunnel server. Your connection code is that id's address on the server; each request your agent sends travels through the tunnel to the extension, which answers it with extension APIs. The public server, `wss://navigation.myagents.click`, is free; it relays messages and stores nothing.
 
 ### Run your own tunnel server
 
 It is one Cloudflare Worker with a Durable Object, on the free plan:
 
 ```bash
-git clone https://github.com/ciro-maciel/tabhand && cd tabhand
+git clone https://github.com/ciro-maciel/assistant-navigation && cd assistant-navigation
 bunx wrangler deploy --config tunnel/wrangler.toml
 ```
 
@@ -111,11 +111,15 @@ Agents are told never to type passwords or card numbers, but that is an instruct
 
 - Chrome only photographs the tab on view: a screenshot shows the agent's tab for an instant.
 - Clicks and typing are synthetic events; a few heavily protected pages ignore them.
-- No console or network inspection: that needs the debugger, which is what Tabhand avoids.
+- No console or network inspection: that needs the debugger, which is what Assistant Navigation avoids.
+
+## Assistant
+
+Assistant Navigation is the browser part of [Assistant](https://myagents.click/?ref=oss-assistant-navigation): agents that work in your tools, with your connections, files and approvals in one place. In Assistant, paste your connection code once in Settings › My Chrome and every agent of your account can use your browser.
 
 ## More from Ciro Cesar Maciel
 
-Free, open-source Mac apps and tools at [ciromaciel.click](https://ciromaciel.click/?ref=oss-tabhand).
+Free, open-source Mac apps and tools at [ciromaciel.click](https://ciromaciel.click/?ref=oss-assistant-navigation).
 
 ## License
 

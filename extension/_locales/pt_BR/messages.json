@@ -1,6 +1,6 @@
 {
   "name": {
-    "message": "Tabhand"
+    "message": "Assistant Navigation"
   },
   "description": {
     "message": "Deixe agentes de IA usarem o seu Chrome de verdade, já logado. Sem faixa de depuração e sem aba presa."
@@ -60,7 +60,7 @@
     "message": "Salvo"
   },
   "welcome_title": {
-    "message": "O Tabhand está ligado"
+    "message": "O Assistant Navigation está ligado"
   },
   "welcome_text": {
     "message": "Os agentes agem no seu Chrome pelo código de conexão abaixo. As abas deles abrem nesta janela, num grupo só deles."

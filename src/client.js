@@ -1,4 +1,4 @@
-// One request to a Tabhand browser: dial its connection code (the tunnel's /extension door),
+// One request to a Assistant Navigation browser: dial its connection code (the tunnel's /extension door),
 // send { id, method, params }, wait for { id, result } or { id, error }, close. Works in Node 22+,
 // Bun, Deno, Workers and browsers (anything with a global WebSocket).
 
@@ -12,7 +12,7 @@ export function codeOf(text) {
 
 // The tunnel's close codes (tunnel/worker.js) that mean the browser is not there.
 const OFFLINE = new Set([4008, 4009, 4010, 1012])
-export const OFFLINE_TEXT = 'the browser is closed or Tabhand is turned off'
+export const OFFLINE_TEXT = 'the browser is closed or Assistant Navigation is turned off'
 
 export function call(code, method, params = {}, timeoutMs = 45_000) {
     const request = { id: crypto.randomUUID(), method, params }

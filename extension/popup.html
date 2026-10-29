@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Tabhand</title>
+        <link rel="stylesheet" href="popup.css" />
+    </head>
+    <body>
+        <header>
+            <img src="icons/icon-32.png" alt="" width="20" height="20" />
+            <b>Tabhand</b>
+            <span id="status" class="status"><i></i><span></span></span>
+            <button id="toggle" class="btn"></button>
+        </header>
+        <section id="welcome" hidden>
+            <h1 data-i18n="welcome_title"></h1>
+            <p data-i18n="welcome_text"></p>
+        </section>
+        <section>
+            <h2 data-i18n="code_title"></h2>
+            <div class="code">
+                <input id="code" type="password" readonly aria-label="Connection code" />
+                <button id="show" class="btn ghost" data-i18n="show"></button>
+                <button id="copy" class="btn dark" data-i18n="copy"></button>
+            </div>
+            <p class="help" data-i18n="code_help"></p>
+        </section>
+        <details>
+            <summary data-i18n="advanced"></summary>
+            <label><span data-i18n="server"></span><input id="server" spellcheck="false" /></label>
+            <p class="help" data-i18n="server_help"></p>
+            <label><span data-i18n="group"></span><input id="group" /></label>
+            <div class="row">
+                <button id="save" class="btn dark" data-i18n="save"></button>
+                <button id="newCode" class="btn ghost" data-i18n="new_code"></button>
+            </div>
+            <p class="help" data-i18n="new_code_help"></p>
+        </details>
+        <footer>
+            <p class="help" data-i18n="script_hint"></p>
+            <a href="https://github.com/ciro-maciel/tabhand" target="_blank" data-i18n="repo"></a>
+            <span id="version"></span>
+        </footer>
+        <script src="popup.js" type="module"></script>
+    </body>
+</html>

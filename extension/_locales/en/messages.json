@@ -1,0 +1,74 @@
+{
+  "name": {
+    "message": "Tabhand"
+  },
+  "description": {
+    "message": "Let AI agents use your real, logged-in Chrome. No debugger banner, no tab to keep open."
+  },
+  "status_on": {
+    "message": "Connected"
+  },
+  "status_wait": {
+    "message": "Connecting…"
+  },
+  "status_off": {
+    "message": "Off"
+  },
+  "toggle_off": {
+    "message": "Turn off"
+  },
+  "toggle_on": {
+    "message": "Turn on"
+  },
+  "code_title": {
+    "message": "Connection code"
+  },
+  "code_help": {
+    "message": "Paste it into the program that drives your agents (Claude Code, Cursor, your own app). Whoever holds it can act in this browser: keep it private."
+  },
+  "copy": {
+    "message": "Copy"
+  },
+  "copied": {
+    "message": "Copied"
+  },
+  "show": {
+    "message": "Show"
+  },
+  "new_code": {
+    "message": "Make a new code"
+  },
+  "new_code_help": {
+    "message": "The old code stops working at once."
+  },
+  "advanced": {
+    "message": "Advanced"
+  },
+  "server": {
+    "message": "Tunnel server"
+  },
+  "server_help": {
+    "message": "The public one is free. You can run your own from the repository."
+  },
+  "group": {
+    "message": "Tab group name"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "welcome_title": {
+    "message": "Tabhand is on"
+  },
+  "welcome_text": {
+    "message": "Agents act in your Chrome through the connection code below. Their tabs open in this window, in their own tab group."
+  },
+  "script_hint": {
+    "message": "To let agents run code in pages, turn on \"Allow user scripts\" in this extension's details."
+  },
+  "repo": {
+    "message": "Source code and docs"
+  }
+}

@@ -1,0 +1,33 @@
+{
+    "name": "tabhand",
+    "version": "1.0.0",
+    "description": "Let AI agents use your real, logged-in Chrome. No debugger banner, no tab to keep open.",
+    "license": "MIT",
+    "author": "Ciro Cesar Maciel (https://ciromaciel.click/?ref=oss-tabhand)",
+    "homepage": "https://github.com/ciro-maciel/tabhand",
+    "repository": "github:ciro-maciel/tabhand",
+    "type": "module",
+    "bin": {
+        "tabhand": "mcp/server.js"
+    },
+    "exports": {
+        "./tools": "./src/tools.js",
+        "./client": "./src/client.js"
+    },
+    "files": [
+        "mcp",
+        "src"
+    ],
+    "engines": {
+        "node": ">=22"
+    },
+    "keywords": [
+        "mcp",
+        "chrome",
+        "browser",
+        "ai-agents",
+        "claude-code",
+        "chrome-extension",
+        "automation"
+    ]
+}

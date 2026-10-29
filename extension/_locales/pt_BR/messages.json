@@ -1,0 +1,74 @@
+{
+  "name": {
+    "message": "Tabhand"
+  },
+  "description": {
+    "message": "Deixe agentes de IA usarem o seu Chrome de verdade, já logado. Sem faixa de depuração e sem aba presa."
+  },
+  "status_on": {
+    "message": "Conectado"
+  },
+  "status_wait": {
+    "message": "Conectando…"
+  },
+  "status_off": {
+    "message": "Desligado"
+  },
+  "toggle_off": {
+    "message": "Desligar"
+  },
+  "toggle_on": {
+    "message": "Ligar"
+  },
+  "code_title": {
+    "message": "Código de conexão"
+  },
+  "code_help": {
+    "message": "Cole no programa que comanda os seus agentes (Claude Code, Cursor, o seu app). Quem tem o código age neste navegador: guarde-o."
+  },
+  "copy": {
+    "message": "Copiar"
+  },
+  "copied": {
+    "message": "Copiado"
+  },
+  "show": {
+    "message": "Mostrar"
+  },
+  "new_code": {
+    "message": "Gerar um código novo"
+  },
+  "new_code_help": {
+    "message": "O código antigo para de funcionar na hora."
+  },
+  "advanced": {
+    "message": "Avançado"
+  },
+  "server": {
+    "message": "Servidor do túnel"
+  },
+  "server_help": {
+    "message": "O público é gratuito. Você pode rodar o seu, a partir do repositório."
+  },
+  "group": {
+    "message": "Nome do grupo de abas"
+  },
+  "save": {
+    "message": "Salvar"
+  },
+  "saved": {
+    "message": "Salvo"
+  },
+  "welcome_title": {
+    "message": "O Tabhand está ligado"
+  },
+  "welcome_text": {
+    "message": "Os agentes agem no seu Chrome pelo código de conexão abaixo. As abas deles abrem nesta janela, num grupo só deles."
+  },
+  "script_hint": {
+    "message": "Para os agentes rodarem código nas páginas, ligue \"Permitir scripts de usuário\" nos detalhes desta extensão."
+  },
+  "repo": {
+    "message": "Código e documentação"
+  }
+}

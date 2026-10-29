@@ -1,0 +1,29 @@
+# Tabhand's tunnel server. Run your own:
+#
+#   bunx wrangler deploy --config tunnel/wrangler.toml          # on <name>.<you>.workers.dev
+#
+# then set the server in the extension's popup (Advanced) to wss://<that host>.
+# Durable Objects with SQLite storage run on the Workers free plan.
+
+name = "tabhand-tunnel"
+main = "worker.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[[durable_objects.bindings]]
+name = "BROWSER_TUNNEL"
+class_name = "BrowserTunnel"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["BrowserTunnel"]
+
+# The public server, wss://tabhand.ciromaciel.click: bunx wrangler deploy --config tunnel/wrangler.toml --env public
+[env.public]
+name = "tabhand-tunnel-public"
+workers_dev = false
+routes = [{ pattern = "tabhand.ciromaciel.click", custom_domain = true }]
+
+[[env.public.durable_objects.bindings]]
+name = "BROWSER_TUNNEL"
+class_name = "BrowserTunnel"

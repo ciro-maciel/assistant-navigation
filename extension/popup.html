@@ -7,39 +7,52 @@
     </head>
     <body>
         <header>
-            <img src="icons/icon-32.png" alt="" width="20" height="20" />
-            <b>Tabhand</b>
-            <span id="status" class="status"><i></i><span></span></span>
+            <img class="mark" src="icons/icon-48.png" alt="" />
+            <div class="brand">
+                <b>Tabhand</b>
+                <span id="status" class="status"><i></i><span></span></span>
+            </div>
             <button id="toggle" class="btn"></button>
         </header>
-        <section id="welcome" hidden>
-            <h1 data-i18n="welcome_title"></h1>
+
+        <section id="welcome" class="note" hidden>
+            <b data-i18n="welcome_title"></b>
             <p data-i18n="welcome_text"></p>
         </section>
-        <section>
-            <h2 data-i18n="code_title"></h2>
+
+        <section class="card">
+            <div class="label" data-i18n="code_title"></div>
             <div class="code">
-                <input id="code" type="password" readonly aria-label="Connection code" />
-                <button id="show" class="btn ghost" data-i18n="show"></button>
-                <button id="copy" class="btn dark" data-i18n="copy"></button>
+                <input id="code" type="password" readonly spellcheck="false" aria-label="Connection code" />
+                <button id="show" class="icon" title="Show" aria-label="Show">
+                    <svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg>
+                </button>
             </div>
+            <button id="copy" class="btn dark wide" data-i18n="copy"></button>
             <p class="help" data-i18n="code_help"></p>
         </section>
-        <details>
-            <summary data-i18n="advanced"></summary>
+
+        <details class="card">
+            <summary>
+                <span data-i18n="advanced"></span>
+                <svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></svg>
+            </summary>
             <label><span data-i18n="server"></span><input id="server" spellcheck="false" /></label>
             <p class="help" data-i18n="server_help"></p>
             <label><span data-i18n="group"></span><input id="group" /></label>
             <div class="row">
                 <button id="save" class="btn dark" data-i18n="save"></button>
-                <button id="newCode" class="btn ghost" data-i18n="new_code"></button>
+                <button id="newCode" class="btn" data-i18n="new_code"></button>
             </div>
             <p class="help" data-i18n="new_code_help"></p>
         </details>
+
         <footer>
-            <p class="help" data-i18n="script_hint"></p>
-            <a href="https://github.com/ciro-maciel/tabhand" target="_blank" data-i18n="repo"></a>
-            <span id="version"></span>
+            <p data-i18n="script_hint"></p>
+            <div class="foot">
+                <a href="https://github.com/ciro-maciel/tabhand" target="_blank" data-i18n="repo"></a>
+                <span id="version"></span>
+            </div>
         </footer>
         <script src="popup.js" type="module"></script>
     </body>

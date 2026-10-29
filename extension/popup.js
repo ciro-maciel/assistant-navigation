@@ -26,6 +26,7 @@ function show(state) {
 $('show').onclick = () => {
     const isHidden = $('code').type === 'password'
     $('code').type = isHidden ? 'text' : 'password'
+    $('show').classList.toggle('on', isHidden)
 }
 $('copy').onclick = async () => {
     await navigator.clipboard.writeText($('code').value)

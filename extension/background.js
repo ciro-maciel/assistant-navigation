@@ -18,13 +18,25 @@ let retryMs = 1000
 
 // --- Settings: this browser's id, the server, on or off, the tab group's name -------------
 
+// The id is made once. On install, the popup, onInstalled and the worker's start all ask at the
+// same moment: one shared promise, or each would make its own id and the socket would hang on a
+// code the popup does not show.
+let making = null
+function ensureId() {
+    making ??= chrome.storage.local.get('id').then(async ({ id }) => {
+        if (/^[a-f0-9]{32}$/.test(id || '')) return id
+        const fresh = [...crypto.getRandomValues(new Uint8Array(16))].map(byte => byte.toString(16).padStart(2, '0')).join('')
+        await chrome.storage.local.set({ id: fresh })
+        return fresh
+    }).finally(() => {
+        making = null
+    })
+    return making
+}
+
 async function settings() {
-    const stored = await chrome.storage.local.get(['id', 'server', 'isOff', 'groupTitle'])
-    let id = stored.id
-    if (!/^[a-f0-9]{32}$/.test(id || '')) {
-        id = [...crypto.getRandomValues(new Uint8Array(16))].map(byte => byte.toString(16).padStart(2, '0')).join('')
-        await chrome.storage.local.set({ id })
-    }
+    const id = await ensureId()
+    const stored = await chrome.storage.local.get(['server', 'isOff', 'groupTitle'])
     return { id, server: stored.server || DEFAULT_SERVER, isOff: Boolean(stored.isOff), groupTitle: stored.groupTitle || 'Tabhand' }
 }
 
@@ -37,8 +49,11 @@ const isOpen = () => socket?.readyState === WebSocket.OPEN || socket?.readyState
 
 async function connect() {
     const current = await settings()
+    const url = `${current.server.replace(/\/+$/, '')}/tunnel/${current.id}/upstream`
+    // A socket on another code (a new code, another server) gives way to the right one.
+    if (isOpen() && socket.url !== url) disconnect()
     if (isOpen() || current.isOff) return showState()
-    const ws = new WebSocket(`${current.server.replace(/\/+$/, '')}/tunnel/${current.id}/upstream`)
+    const ws = new WebSocket(url)
     socket = ws
     ws.onopen = () => {
         retryMs = 1000
@@ -234,7 +249,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             if (typeof message.isOff === 'boolean') changes.isOff = message.isOff
             if (typeof message.server === 'string') changes.server = message.server.trim() || DEFAULT_SERVER
             if (typeof message.groupTitle === 'string') changes.groupTitle = message.groupTitle.trim() || 'Tabhand'
-            if (message.isNewCode) changes.id = null
+            if (message.isNewCode) await chrome.storage.local.remove('id')
             await chrome.storage.local.set(changes)
             // A new server or code takes a new connection.
             if ('server' in changes || message.isNewCode || changes.isOff) disconnect()

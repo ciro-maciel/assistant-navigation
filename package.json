@@ -1,6 +1,6 @@
 {
     "name": "tabhand",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Let AI agents use your real, logged-in Chrome. No debugger banner, no tab to keep open.",
     "license": "MIT",
     "author": "Ciro Cesar Maciel (https://ciromaciel.click/?ref=oss-tabhand)",

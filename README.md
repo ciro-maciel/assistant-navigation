@@ -105,13 +105,17 @@ Then, in the extension's popup, open **Advanced** and set the server to `wss://<
 
 The connection code is a key to your browser, logged in as you: whoever holds it can read and act in your tabs. Keep it like a password. If it leaks, open the popup and click **Make a new code**: the old one stops working at once. **Turn off** in the popup, or the icon's badge `OFF`, cuts every agent off.
 
-Agents are told never to type passwords or card numbers, but that is an instruction, not a wall: give the code only to agents and apps you trust. See [SECURITY.md](SECURITY.md) to report a vulnerability.
+Agents are told never to type passwords or card numbers, but that is an instruction, not a wall: give the code only to agents and apps you trust. What is defended and what is not, line by line: [THREAT_MODEL.md](THREAT_MODEL.md). See [SECURITY.md](SECURITY.md) to report a vulnerability.
 
 ## Limits
 
 - Chrome only photographs the tab on view: a screenshot shows the agent's tab for an instant.
 - Clicks and typing are synthetic events; a few heavily protected pages ignore them.
 - No console or network inspection: that needs the debugger, which is what Assistant Navigation avoids.
+
+## Learned from
+
+- [Coral](https://github.com/noelschwarz/coral): publishing what is defended and what is not ([THREAT_MODEL.md](THREAT_MODEL.md)).
 
 ## Assistant
 

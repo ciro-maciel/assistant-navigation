@@ -105,13 +105,17 @@ Depois, na janela da extensão, abra **Avançado** e troque o servidor para `wss
 
 O código de conexão é uma chave do seu navegador, logado como você: quem tem o código lê e age nas suas abas. Guarde como uma senha. Se vazar, abra a janela da extensão e clique em **Gerar um código novo**: o antigo para de funcionar na hora. **Desligar**, na janela, ou o selo `OFF` no ícone, corta todos os agentes.
 
-Os agentes são instruídos a nunca digitar senhas nem números de cartão, mas isso é uma instrução, não uma parede: dê o código só a agentes e apps em que você confia. Veja o [SECURITY.md](SECURITY.md) para relatar uma vulnerabilidade.
+O que é defendido e o que não é, linha a linha: [THREAT_MODEL.pt-BR.md](THREAT_MODEL.pt-BR.md). Os agentes são instruídos a nunca digitar senhas nem números de cartão, mas isso é uma instrução, não uma parede: dê o código só a agentes e apps em que você confia. Veja o [SECURITY.md](SECURITY.md) para relatar uma vulnerabilidade.
 
 ## Limites
 
 - O Chrome só fotografa a aba visível: uma foto mostra a aba do agente por um instante.
 - Cliques e digitação são eventos simulados; algumas páginas muito protegidas os ignoram.
 - Sem console nem inspeção de rede: isso exige o depurador, que é justamente o que o Assistant Navigation evita.
+
+## Aprendemos com
+
+- [Coral](https://github.com/noelschwarz/coral): publicar o que é defendido e o que não é ([THREAT_MODEL.pt-BR.md](THREAT_MODEL.pt-BR.md)).
 
 ## Assistant
 

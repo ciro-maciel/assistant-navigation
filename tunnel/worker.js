@@ -6,6 +6,12 @@
 // /tunnel/{id}/extension (the connection code), and each of its connections travels to the
 // extension as a virtual connection (ws_open, ws_frame, ws_close). The id is a 128-bit secret the
 // extension made: whoever holds the connection code can drive that browser.
+//
+// The upstream side has a key of its own (05/11/2026, THREAT_MODEL.md): the extension sends a second
+// 128-bit secret, never shown, as ?key=. The first keyed upstream of an id stores the key's SHA-256;
+// from then on only that key may stand in for the browser, so the connection code alone cannot
+// impersonate it. An id no keyed extension has claimed yet still takes a keyless upstream (versions
+// before 1.2.0), until its own extension updates and claims it.
 
 import { DurableObject } from 'cloudflare:workers'
 
@@ -15,6 +21,7 @@ const CLOSE_TUNNEL_OFFLINE = 4008
 const CLOSE_FAILED_TO_CONTACT = 4009
 const CLOSE_LOCAL_TIMEOUT = 4010
 const CLOSE_LOCAL_WS_ERROR = 4012
+const CLOSE_WRONG_KEY = 4003
 const DOWNSTREAM_OPEN_TIMEOUT_MS = 10_000
 
 /** A tunnel request, or null when the path is not one. */
@@ -37,7 +44,7 @@ export class BrowserTunnel extends DurableObject {
 
     async fetch(request) {
         const path = new URL(request.url).pathname
-        if (path === '/upstream') return this.openUpstream()
+        if (path === '/upstream') return this.openUpstream(new URL(request.url).searchParams.get('key'))
         if (path === '/extension') return this.openDownstream(request.headers)
         return new Response('Not Found', { status: 404 })
     }
@@ -73,8 +80,13 @@ export class BrowserTunnel extends DurableObject {
         closeSocket(socket, CLOSE_INTERNAL_ERROR, 'WebSocket error')
     }
 
-    // The same Chrome reconnecting replaces its older socket: the newest upstream wins.
-    openUpstream() {
+    // The same Chrome reconnecting replaces its older socket: the newest upstream wins, but only an
+    // upstream with the browser's key once one has claimed the id.
+    async openUpstream(key) {
+        const claimed = await this.ctx.storage.get('keyHash')
+        const offered = key && /^[a-f0-9]{32}$/.test(key) ? await sha256(key) : null
+        if (claimed ? offered !== claimed : key && !offered) return closingResponse(CLOSE_WRONG_KEY, 'Wrong browser key', new Headers())
+        if (!claimed && offered) await this.ctx.storage.put('keyHash', offered)
         const [client, server] = Object.values(new WebSocketPair())
         this.ctx.acceptWebSocket(server, ['upstream'])
         server.serializeAttachment({ role: 'upstream', connectedAt: Date.now() })
@@ -161,6 +173,11 @@ export class BrowserTunnel extends DurableObject {
         this.pendingDownstreams.clear()
         for (const socket of this.ctx.getWebSockets('downstream')) closeSocket(socket, CLOSE_SERVICE_RESTART, 'Remote browser disconnected')
     }
+}
+
+async function sha256(text) {
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))
+    return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
 function closingResponse(code, reason, headers) {

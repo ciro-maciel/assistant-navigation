@@ -34,10 +34,29 @@ function ensureId() {
     return making
 }
 
+// The browser's own key, never shown (05/11/2026, THREAT_MODEL.md): the tunnel lets only this key
+// stand in for this browser, so the connection code alone cannot impersonate it. Made once with
+// the id, and again with every new code.
+// One shared promise, as for the id: two keys made at the same moment would leave the tunnel
+// holding the first and refusing this browser for good.
+let makingKey = null
+function ensureKey() {
+    makingKey ??= chrome.storage.local.get('upstreamKey').then(async ({ upstreamKey }) => {
+        if (/^[a-f0-9]{32}$/.test(upstreamKey || '')) return upstreamKey
+        const fresh = [...crypto.getRandomValues(new Uint8Array(16))].map(byte => byte.toString(16).padStart(2, '0')).join('')
+        await chrome.storage.local.set({ upstreamKey: fresh })
+        return fresh
+    }).finally(() => {
+        makingKey = null
+    })
+    return makingKey
+}
+
 async function settings() {
     const id = await ensureId()
+    const key = await ensureKey()
     const stored = await chrome.storage.local.get(['server', 'isOff', 'groupTitle'])
-    return { id, server: stored.server || DEFAULT_SERVER, isOff: Boolean(stored.isOff), groupTitle: stored.groupTitle || 'Assistant' }
+    return { id, key, server: stored.server || DEFAULT_SERVER, isOff: Boolean(stored.isOff), groupTitle: stored.groupTitle || 'Assistant' }
 }
 
 /** The connection code: whoever holds it can drive this browser. */
@@ -49,7 +68,7 @@ const isOpen = () => socket?.readyState === WebSocket.OPEN || socket?.readyState
 
 async function connect() {
     const current = await settings()
-    const url = `${current.server.replace(/\/+$/, '')}/tunnel/${current.id}/upstream`
+    const url = `${current.server.replace(/\/+$/, '')}/tunnel/${current.id}/upstream?key=${current.key}`
     // A socket on another code (a new code, another server) gives way to the right one.
     if (isOpen() && socket.url !== url) disconnect()
     if (isOpen() || current.isOff) return showState()
@@ -249,7 +268,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             if (typeof message.isOff === 'boolean') changes.isOff = message.isOff
             if (typeof message.server === 'string') changes.server = message.server.trim() || DEFAULT_SERVER
             if (typeof message.groupTitle === 'string') changes.groupTitle = message.groupTitle.trim() || 'Assistant'
-            if (message.isNewCode) await chrome.storage.local.remove('id')
+            if (message.isNewCode) await chrome.storage.local.remove(['id', 'upstreamKey'])
             await chrome.storage.local.set(changes)
             // A new server or code takes a new connection.
             if ('server' in changes || message.isNewCode || changes.isOff) disconnect()

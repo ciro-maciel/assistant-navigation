@@ -19,7 +19,8 @@ O seu Chrome, logado como você: cada conta aberta nele. Quem consegue mandar pe
 | Alguém adivinha o seu código de conexão | O id tem 128 bits aleatórios de `crypto.getRandomValues` (`extension/background.js`). Não sai de nada sobre você. |
 | Um código vazado continua valendo | **Gerar um código novo** no popup troca o id; o endereço antigo deixa de chegar ao seu navegador na hora. |
 | Você quer todos os agentes fora agora | **Desligar** no popup fecha a conexão e a mantém fechada (selo `OFF`) até você ligar de novo. |
-| O túnel guarda as suas páginas | O worker não tem armazenamento nem registro: só segura as mensagens na memória enquanto as retransmite (`tunnel/worker.js`). |
+| Alguém com o código se passa pelo seu navegador | Desde a 1.2.0 a extensão também tem uma chave só dela, nunca mostrada, e a envia ao se conectar. A primeira conexão com chave de um id guarda o SHA-256 da chave; daí em diante o túnel recusa qualquer outra chave, ou nenhuma (`tunnel/worker.js`, testado de ponta a ponta pelo `scripts/tunnel-key-test.mjs`). |
+| O túnel guarda as suas páginas | O worker não registra nada e guarda só esse hash: as mensagens ficam na memória só enquanto ele as retransmite (`tunnel/worker.js`). |
 | Uma ferramenta sem aviso esconde um depurador | Ele nunca usa o depurador do Chrome: não há a permissão `debugger` no `extension/manifest.json`. |
 
 ## Não defendido
@@ -29,7 +30,7 @@ Leia antes de dar o código a qualquer coisa.
 | Ameaça | Por que não | O que você pode fazer |
 | --- | --- | --- |
 | **Quem tem o código é você, no seu navegador.** | O código é a única credencial. Não há segundo fator, permissão por site nem etapa de aprovação. | Guarde como uma senha; gere outro se ele pode ter vazado. |
-| **Quem tem o código também pode se passar pelo seu navegador.** | O túnel aceita qualquer conexão em `/upstream` para aquele id, e a mais nova vence. Quem tiver o código pode receber os pedidos do seu agente e responder com páginas inventadas. | O mesmo: o código é tudo. |
+| **Uma extensão anterior à 1.2.0 não tem chave.** | Até uma extensão 1.2.0 se conectar uma vez e tomar o id, o túnel ainda aceita um navegador sem chave naquele id, para as versões antigas continuarem funcionando. | Atualize a extensão: a primeira conexão dela fecha essa porta. |
 | **O agente lê todas as abas, não só as do grupo dele.** | `browser_tabs` lista todas as abas, e `browser_read`, `browser_screenshot` e `browser_script` aceitam qualquer aba. O grupo só decide onde as abas novas abrem. | Feche as abas que um agente não deve ver, ou desligue a extensão quando não precisar. |
 | **`browser_script` roda qualquer JavaScript na página.** | É o que deixa os agentes lidarem com páginas que as outras ferramentas não alcançam. | Use agentes em que você confia. |
 | **Uma página pode falar com o seu agente.** | O texto da página chega ao modelo que a lê (injeção de prompt). Uma página pode pedir ao agente para visitar, clicar ou enviar algo. | Prefira agentes que perguntam antes de agir; não deixe um agente sozinho em sites em que você não confia. |

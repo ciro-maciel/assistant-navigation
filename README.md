@@ -113,9 +113,12 @@ Agents are told never to type passwords or card numbers, but that is an instruct
 - Clicks and typing are synthetic events; a few heavily protected pages ignore them.
 - No console or network inspection: that needs the debugger, which is what Assistant Navigation avoids.
 
+The whole list, from the tasks it has run, including what needs you (a CAPTCHA, a 2FA code): [WHAT-WORKS.md](WHAT-WORKS.md).
+
 ## Learned from
 
 - [Coral](https://github.com/noelschwarz/coral): publishing what is defended and what is not ([THREAT_MODEL.md](THREAT_MODEL.md)).
+- [browser-mcp](https://github.com/Agent360dk/browser-mcp): publishing what works and what does not ([WHAT-WORKS.md](WHAT-WORKS.md)).
 
 ## Assistant
 

@@ -113,9 +113,12 @@ O que é defendido e o que não é, linha a linha: [THREAT_MODEL.pt-BR.md](THREA
 - Cliques e digitação são eventos simulados; algumas páginas muito protegidas os ignoram.
 - Sem console nem inspeção de rede: isso exige o depurador, que é justamente o que o Assistant Navigation evita.
 
+A lista inteira, feita a partir das tarefas que ele já fez, inclusive o que precisa de você (um CAPTCHA, um código de 2FA): [WHAT-WORKS.pt-BR.md](WHAT-WORKS.pt-BR.md).
+
 ## Aprendemos com
 
 - [Coral](https://github.com/noelschwarz/coral): publicar o que é defendido e o que não é ([THREAT_MODEL.pt-BR.md](THREAT_MODEL.pt-BR.md)).
+- [browser-mcp](https://github.com/Agent360dk/browser-mcp): publicar o que funciona e o que não funciona ([WHAT-WORKS.pt-BR.md](WHAT-WORKS.pt-BR.md)).
 
 ## Assistant
 

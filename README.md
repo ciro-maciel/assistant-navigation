@@ -128,6 +128,10 @@ Assistant Navigation is the browser part of [Assistant](https://myagents.click/?
 
 Free, open-source Mac apps and tools at [ciromaciel.click](https://ciromaciel.click/?ref=oss-assistant-navigation).
 
+**Curated lists.** [Nineteen awesome lists](https://go.mymarketing.click/oss-assistant-navigation-listas) in Brazilian Portuguese, translated into 14 languages: AI at work by profession, Pix, NF-e, payments, Open Finance, WhatsApp, Brazilian APIs, MCP servers, Claude Code and more. Every link was opened before it went in.
+
+**Support.** Everything here is free and stays free. If it saved you time, [buy me a coffee](https://go.mymarketing.click/oss-assistant-navigation-apoie): you choose the amount, by Pix or card.
+
 ## License
 
 MIT. The tunnel server is ported from [Playwriter](https://github.com/remorses/playwriter) (MIT); see [NOTICE](NOTICE).

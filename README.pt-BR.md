@@ -128,6 +128,10 @@ O Assistant Navigation é a parte de navegador do [Assistant](https://myagents.c
 
 Apps de Mac e ferramentas gratuitos e de código aberto em [ciromaciel.click](https://ciromaciel.click/?ref=oss-assistant-navigation).
 
+**Listas curadas.** [Dezenove listas awesome](https://go.mymarketing.click/oss-assistant-navigation-listas) em português, traduzidas para 14 idiomas: IA no trabalho por profissão, Pix, NF-e, pagamentos, Open Finance, WhatsApp, APIs brasileiras, servidores MCP, Claude Code e mais. Cada link foi aberto antes de entrar.
+
+**Apoie.** Tudo aqui é grátis e continua grátis. Se te poupou tempo, [pague um café](https://go.mymarketing.click/oss-assistant-navigation-apoie): você escolhe o valor, por Pix ou cartão.
+
 ## Licença
 
 MIT. O servidor do túnel foi portado do [Playwriter](https://github.com/remorses/playwriter) (MIT); veja o [NOTICE](NOTICE).

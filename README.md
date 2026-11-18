@@ -2,7 +2,7 @@
 
 **Let AI agents use your real, logged-in Chrome. No debugger banner, no tab to keep open.**
 
-Part of [Assistant](https://myagents.click/?ref=oss-assistant-navigation), the AI assistant by [Ciro Cesar Maciel](https://ciromaciel.click/?ref=oss-assistant-navigation) that works in your tools: it is how Assistant's agents use your browser. It is also free and open source, for any agent: Claude Code, Cursor or your own app.
+Part of [Assistant](https://myagents.click/en?ref=oss-assistant-navigation), the AI assistant by [Ciro Cesar Maciel](https://ciromaciel.click/?ref=oss-assistant-navigation) that works in your tools: it is how Assistant's agents use your browser. It is also free and open source, for any agent: Claude Code, Cursor or your own app.
 
 <img src="docs/icon-512.png" alt="Assistant Navigation" width="96" />
 
@@ -122,7 +122,7 @@ The whole list, from the tasks it has run, including what needs you (a CAPTCHA, 
 
 ## Assistant
 
-Assistant Navigation is the browser part of [Assistant](https://myagents.click/?ref=oss-assistant-navigation): agents that work in your tools, with your connections, files and approvals in one place. In Assistant, paste your connection code once in Settings › My Chrome and every agent of your account can use your browser.
+Assistant Navigation is the browser part of [Assistant](https://myagents.click/en?ref=oss-assistant-navigation): agents that work in your tools, with your connections, files and approvals in one place. In Assistant, paste your connection code once in Settings › My Chrome and every agent of your account can use your browser.
 
 ## More from Ciro Cesar Maciel
 
